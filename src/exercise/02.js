@@ -16,9 +16,9 @@ function Toggle(props) {
   // 💰 React.Children.map(props.children, child => {/* return child clone here */})
   // 📜 https://reactjs.org/docs/react-api.html#reactchildren
   // 📜 https://reactjs.org/docs/react-api.html#cloneelement
-  // return <Switch on={on} onClick={toggle} />
   return React.Children.map(props.children, child => {
-    return React.cloneElement(child, { toggle, on })
+    const props = typeof child.type === 'function' ? { toggle, on } : {}
+    return React.cloneElement(child, { ...props })
   })
 }
 
@@ -41,6 +41,7 @@ function App() {
       <Toggle>
         <ToggleOn>The button is on</ToggleOn>
         <ToggleOff>The button is off</ToggleOff>
+        <span>Hello</span>
         <ToggleButton />
       </Toggle>
     </div>
