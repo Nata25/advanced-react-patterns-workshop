@@ -2,7 +2,8 @@ import * as React from 'react'
 import {renderToggle, screen, userEvent} from '../../test/utils'
 // import App, {Toggle} from '../final/06'
 // import App, {Toggle} from '../exercise/06'
-import App, {Toggle} from '../exercise/06.extra-01'
+// import App, {Toggle} from '../exercise/06.extra-01'
+import App, {Toggle} from '../exercise/06.extra-02'
 
 test('toggling either toggle toggles both', () => {
   renderToggle(<App />)
