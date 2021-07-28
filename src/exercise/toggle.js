@@ -13,16 +13,47 @@ const ToggleButton = () => {
 const customClick = (arg) => console.info('onButtonClick', arg)
 
 const IndicatorButton = () => {
-  const { getTogglerProps, on } = useToggle()
+  const [timesClicked, setTimesClicked] = React.useState(0)
+  const clickedTooMuch = timesClicked >= 4
+
+  function toggleStateReducer(state, action) {
+    switch (action.type) {
+      case 'toggle': {
+        if (clickedTooMuch) {
+          return {on: state.on}
+        }
+        return {on: !state.on}
+      }
+      case 'reset': {
+        return {on: false}
+      }
+      default: {
+        throw new Error(`Unsupported type: ${action.type}`)
+      }
+    }
+  }
+
+  const { getTogglerProps, on } = useToggle({ reducer: toggleStateReducer })
   return (
-    <button {...getTogglerProps({
-        'aria-label': 'custom-button',
-        // onClick: () => customClick('hello from custom click'),
-        id: 'custom-button-id',
-      })}
-    >
-      {on ? 'on' : 'off'}
-    </button>
+    <div>
+      {clickedTooMuch ? (
+          <div data-testid="notice">
+            Whoa, you clicked too much!
+            <br />
+          </div>
+        ) : timesClicked > 0 ? (
+          <div data-testid="click-count">Click count: {timesClicked}</div>
+        ) : null
+      }
+      <button {...getTogglerProps({
+          'aria-label': 'custom-button',
+          onClick: () => setTimesClicked(count => count + 1),
+          id: 'custom-button-id',
+        })}
+      >
+        {on ? 'on' : 'off'}
+      </button>
+    </div>
   )
 } 
 

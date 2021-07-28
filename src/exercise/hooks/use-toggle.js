@@ -14,8 +14,9 @@ function toggleReducer(state, {type, initialState}) {
   }
 }
 
-const useToggle = ({ initialState = { on: false } } = {}) => {
-  const [state, dispatch] = React.useReducer(toggleReducer, initialState)
+const useToggle = ({ initialState = { on: false }, reducer: customReducer } = {}) => {
+  const innerReducer = customReducer ? customReducer : toggleReducer
+  const [state, dispatch] = React.useReducer(innerReducer, initialState)
   const toggle = () => dispatch({type: 'toggle'})
   const reset = () => dispatch({type: 'reset', initialState})
 
