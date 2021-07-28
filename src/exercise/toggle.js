@@ -6,13 +6,39 @@ import {Switch} from '../switch'
 import { useToggle, toggleReducer as defaultReducer } from './hooks/use-toggle'
 
 const ToggleButton = () => {
-  const { on, getTogglerProps } = useToggle()
-  return <Switch {...getTogglerProps({on}) } />
+  const { on } = useToggle()
+  return <button>{on ? 'on' : 'off'}</button>
 }
 
-const customClick = (arg) => console.info('onButtonClick', arg)
+const ResetButton = ({ onReset }) => {
+  return <button onClick={onReset}>Reset</button>
+}
 
-const IndicatorButton = () => {
+const Info = ({ clickedTooMuch, timesClicked }) => {
+  return (
+    clickedTooMuch ? (
+      <div data-testid="notice">
+        Whoa, you clicked too much!
+        <br />
+      </div>
+    ) : timesClicked > 0 ? (
+      <div data-testid="click-count">Click count: {timesClicked}</div>
+    ) : null
+  )
+}
+
+const CounterButton = (props) => {
+  return (
+    <div>
+      <button {...props}
+      >
+        click
+      </button>
+    </div>
+  )
+}
+
+function App() {
   const [timesClicked, setTimesClicked] = React.useState(0)
   const clickedTooMuch = timesClicked >= 4
   const { getTogglerProps, on, reset } = useToggle({ reducer: toggleStateReducer })
@@ -31,34 +57,16 @@ const IndicatorButton = () => {
 
   return (
     <div>
-      {clickedTooMuch ? (
-          <div data-testid="notice">
-            Whoa, you clicked too much!
-            <br />
-          </div>
-        ) : timesClicked > 0 ? (
-          <div data-testid="click-count">Click count: {timesClicked}</div>
-        ) : null
-      }
-      <button onClick={onReset}>Reset</button>
-      <button {...getTogglerProps({
+      <Switch {...getTogglerProps({on}) } />
+      <ToggleButton />
+      <ResetButton onReset={onReset} />
+      <CounterButton {...getTogglerProps({
           'aria-label': 'custom-button',
           onClick: () => setTimesClicked(count => count + 1),
           id: 'custom-button-id',
           disabled: clickedTooMuch
-        })}
-      >
-        click
-      </button>
-    </div>
-  )
-} 
-
-function App() {
-  return (
-    <div>
-      <ToggleButton />
-      <IndicatorButton />
+        })} />
+      <Info clickedTooMuch={clickedTooMuch} timesClicked={timesClicked} />
     </div>
   )
 }
