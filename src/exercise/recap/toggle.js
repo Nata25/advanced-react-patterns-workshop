@@ -2,7 +2,7 @@
 // http://localhost:3000/isolated/exercise/02.js
 
 import * as React from 'react'
-import {Switch} from '../switch'
+import {Switch} from '../../switch'
 import { useToggle, toggleReducer as defaultReducer } from './hooks/use-toggle'
 
 const ToggleButton = ({ value, onChange }) => {

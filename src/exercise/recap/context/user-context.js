@@ -1,7 +1,7 @@
 // ./context/user-context.js
 import React from 'react'
-import * as userClient from '../../user-client'
-import {useAuth} from '../../auth-context'
+import * as userClient from '../../../user-client'
+import {useAuth} from '../../../auth-context'
 
 const UserContext = React.createContext()
 UserContext.displayName = 'UserContext'
