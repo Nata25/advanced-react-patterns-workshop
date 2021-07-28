@@ -31,9 +31,10 @@ const useToggle = ({ initialState = { on: false }, reducer: customReducer } = {}
     }
   }
 
-  return { on: state.on, toggle, reset, getTogglerProps }
+  return { on: state.on, getTogglerProps, reset }
 }
 
 export {
-  useToggle
+  useToggle,
+  toggleReducer
 }

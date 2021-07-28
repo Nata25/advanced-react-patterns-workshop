@@ -3,7 +3,7 @@
 
 import * as React from 'react'
 import {Switch} from '../switch'
-import { useToggle } from './hooks/use-toggle'
+import { useToggle, toggleReducer as defaultReducer } from './hooks/use-toggle'
 
 const ToggleButton = () => {
   const { on, getTogglerProps } = useToggle()
@@ -15,25 +15,20 @@ const customClick = (arg) => console.info('onButtonClick', arg)
 const IndicatorButton = () => {
   const [timesClicked, setTimesClicked] = React.useState(0)
   const clickedTooMuch = timesClicked >= 4
-
+  const { getTogglerProps, on, reset } = useToggle({ reducer: toggleStateReducer })
+  
   function toggleStateReducer(state, action) {
-    switch (action.type) {
-      case 'toggle': {
-        if (clickedTooMuch) {
-          return {on: state.on}
-        }
-        return {on: !state.on}
-      }
-      case 'reset': {
-        return {on: false}
-      }
-      default: {
-        throw new Error(`Unsupported type: ${action.type}`)
-      }
+    if (action.type === 'toggle' && timesClicked >= 4) {
+      return {on: state.on}
     }
+    return defaultReducer(state, action)
   }
 
-  const { getTogglerProps, on } = useToggle({ reducer: toggleStateReducer })
+  const onReset = () => {
+    setTimesClicked(0)
+    reset()
+  }
+
   return (
     <div>
       {clickedTooMuch ? (
@@ -45,13 +40,15 @@ const IndicatorButton = () => {
           <div data-testid="click-count">Click count: {timesClicked}</div>
         ) : null
       }
+      <button onClick={onReset}>Reset</button>
       <button {...getTogglerProps({
           'aria-label': 'custom-button',
           onClick: () => setTimesClicked(count => count + 1),
           id: 'custom-button-id',
+          disabled: clickedTooMuch
         })}
       >
-        {on ? 'on' : 'off'}
+        click
       </button>
     </div>
   )
