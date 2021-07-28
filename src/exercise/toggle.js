@@ -5,9 +5,8 @@ import * as React from 'react'
 import {Switch} from '../switch'
 import { useToggle, toggleReducer as defaultReducer } from './hooks/use-toggle'
 
-const ToggleButton = () => {
-  const { on } = useToggle()
-  return <button>{on ? 'on' : 'off'}</button>
+const ToggleButton = ({ value, onChange }) => {
+  return <button onClick={onChange}>{value ? 'on' : 'off'}</button>
 }
 
 const ResetButton = ({ onReset }) => {
@@ -41,7 +40,7 @@ const CounterButton = (props) => {
 function App() {
   const [timesClicked, setTimesClicked] = React.useState(0)
   const clickedTooMuch = timesClicked >= 4
-  const { getTogglerProps, on, reset } = useToggle({ reducer: toggleStateReducer })
+  const { getTogglerProps, on, toggle, reset } = useToggle({ reducer: toggleStateReducer })
   
   function toggleStateReducer(state, action) {
     if (action.type === 'toggle' && timesClicked >= 4) {
@@ -58,7 +57,7 @@ function App() {
   return (
     <div>
       <Switch {...getTogglerProps({on}) } />
-      <ToggleButton />
+      <ToggleButton value={on} onChange={toggle} />
       <ResetButton onReset={onReset} />
       <CounterButton {...getTogglerProps({
           'aria-label': 'custom-button',
