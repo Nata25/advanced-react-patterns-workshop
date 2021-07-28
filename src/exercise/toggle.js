@@ -3,29 +3,11 @@
 
 import * as React from 'react'
 import {Switch} from '../switch'
-import { useToggle, ToggleProvider } from './context/toggle-context'
-
-function Toggle({ children }) {
-  return (
-    <ToggleProvider>
-      {children}
-    </ToggleProvider>
-  )
-}
-
-const ToggleOn = ({children}) => {
-  const { on } = useToggle()
-  return on ? children : null
-}
-
-const ToggleOff = ({children}) => {
-  const { on } = useToggle()
-  return on ? null : children
-} 
+import { useToggle } from './hooks/use-toggle'
 
 const ToggleButton = () => {
-  const { on, togglerProps } = useToggle()
-  return <Switch on={on} {...togglerProps } />
+  const { on, getTogglerProps } = useToggle()
+  return <Switch {...getTogglerProps({on}) } />
 }
 
 const customClick = (arg) => console.info('onButtonClick', arg)
@@ -35,7 +17,7 @@ const IndicatorButton = () => {
   return (
     <button {...getTogglerProps({
         'aria-label': 'custom-button',
-        onClick: () => customClick('hello'),
+        // onClick: () => customClick('hello from custom click'),
         id: 'custom-button-id',
       })}
     >
@@ -47,12 +29,8 @@ const IndicatorButton = () => {
 function App() {
   return (
     <div>
-      <Toggle>
-        {/* <ToggleOn>The button is on</ToggleOn> */}
-        {/* <ToggleOff>The button is off</ToggleOff> */}
-        <ToggleButton />
-        <IndicatorButton />
-      </Toggle>
+      <ToggleButton />
+      <IndicatorButton />
     </div>
   )
 }
