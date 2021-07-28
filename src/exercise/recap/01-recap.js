@@ -1,5 +1,5 @@
 // Context Module Functions
-// http://localhost:3000/isolated/exercise/01.js
+// http://localhost:3000/isolated/exercise/recap/01-recap.js
 
 import * as React from 'react'
 import {dequal} from 'dequal'
